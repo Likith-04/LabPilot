@@ -1,9 +1,8 @@
 """
-LabPilot Backend Application
+RAG PDF Chat backend application
 
-A FastAPI-based backend for laboratory manual assistance using Retrieval Augmented Generation.
+A FastAPI backend for PDF question answering using Retrieval Augmented Generation.
 Supports multiple AI providers with fallback capabilities.
 """
 
 __version__ = "1.0.0"
-__author__ = "Arnob Mahmud"

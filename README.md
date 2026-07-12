@@ -124,11 +124,11 @@ curl -X POST "http://127.0.0.1:8000/ask" \
 
 ## Environment Variables
 
-This repo does not currently include committed `.env.example` files. Create local `.env` files manually when needed.
+Use `backend/.env.example` as the backend template. Create frontend env values manually or through the deployment dashboard.
 
 ### Backend
 
-Create `backend/.env`:
+Create `backend/.env` from `backend/.env.example` for local development, or set the same variables in your deployment platform:
 
 ```env
 # App
@@ -258,6 +258,8 @@ python -m unittest discover -s tests -p "test_*.py"
 Deploy the frontend and backend separately.
 
 ### Backend: Docker Service
+
+Backend-specific deploy notes are in `backend/DEPLOYMENT.md`.
 
 Use `backend/Dockerfile`.
 

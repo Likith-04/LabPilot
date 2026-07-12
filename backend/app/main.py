@@ -44,7 +44,7 @@ async def lifespan(app: FastAPI):
     - Shutdown: Cleanup resources
     """
     # Startup
-    print("🚀 Starting LabPilot API...")
+    print("Starting RAG PDF Chat API...")
 
     # Read env-backed settings once at startup; reused by singleton services.
     settings = get_settings()
@@ -79,12 +79,12 @@ async def lifespan(app: FastAPI):
         )
     else:
         print("   Rate limits: disabled (per-IP upload/ask limits set to 0)")
-    print("✅ API ready!")
+    print("API ready.")
     
     yield
     
     # Shutdown
-    print("👋 Shutting down...")
+    print("Shutting down...")
 
 
 def create_app() -> FastAPI:
@@ -98,7 +98,7 @@ def create_app() -> FastAPI:
     
     # Create app with metadata
     app = FastAPI(
-        title="LabPilot API",
+        title="RAG PDF Chat API",
         description="""
         Ask grounded questions about uploaded laboratory manuals using Retrieval Augmented Generation.
         

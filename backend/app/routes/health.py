@@ -26,7 +26,7 @@ async def root():
     """
     return StatusResponse(
         status="running",
-        message="LabPilot API is ready"
+        message="RAG PDF Chat API is ready"
     )
 
 

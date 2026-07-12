@@ -1,0 +1,37 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+
+# Frontend is deployed separately and should not be part of the backend image.
+frontend/
+node_modules/
+
+# Local Python/runtime artifacts.
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime data should be created by the deployed container or mounted volume.
+backend/faiss_index/
+backend/uploads/
+backend/documents/
+faiss_index/
+uploads/
+documents/
+
+# Local/editor artifacts.
+.idea/
+.vscode/
+*.log
+.DS_Store
+
+# Docs are not needed in the runtime image.
+docs/
+*.md
+!README.md

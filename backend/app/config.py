@@ -153,8 +153,8 @@ class Settings(BaseSettings):
     """
 
     # Application
-    app_name: str = "LabPilot"
-    app_version: str = "2.0.0"
+    app_name: str = "RAG PDF Chat"
+    app_version: str = "1.0.0"
     debug: bool = False
 
     # API Keys (loaded from environment)

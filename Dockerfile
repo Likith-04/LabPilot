@@ -1,13 +1,8 @@
-# ---------------------------------------------------------------------------
-# RAG PDF Chat backend image
+# Railway backend image for the monorepo root.
 #
-# Deployment contract:
-#   - Build context/base directory: backend
-#   - Container port: 3000
-#   - Health path: /health
-#   - Writable data/cache paths: /app/faiss_index and /app/.cache
-#   - Run one worker per replica unless you add shared vector storage + locking.
-# ---------------------------------------------------------------------------
+# Railway auto-detects a Dockerfile only at the service source root. This file
+# builds the FastAPI backend from ./backend while leaving frontend deployment to
+# Vercel.
 
 FROM python:3.12-slim
 
@@ -22,18 +17,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Runtime OS deps only.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps first so code-only edits keep this layer cached.
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY backend/ .
 
-# Writable dirs for FAISS + Hugging Face/torch caches; then drop root.
 RUN mkdir -p documents uploads faiss_index faiss_index/sessions .cache/huggingface .cache/transformers \
     && groupadd --system --gid 10001 appgroup \
     && useradd --system --uid 10001 --gid appgroup --home-dir /app --no-create-home appuser \
@@ -41,11 +33,9 @@ RUN mkdir -p documents uploads faiss_index faiss_index/sessions .cache/huggingfa
 
 USER appuser
 
-# Document the port Coolify / Traefik expect (ENV PORT may still be overridden at run).
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
   CMD python -c "import urllib.request,os; p=os.environ.get('PORT','3000'); urllib.request.urlopen('http://127.0.0.1:'+p+'/health')" || exit 1
 
-# Trust proxy headers from the platform router so request URLs/IPs are correct.
 CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
