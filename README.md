@@ -412,9 +412,9 @@ VITE_API_BASE_URL=https://your-backend-domain.up.railway.app
 
 # 🌐 Live Demo
 
-**Frontend:** https://your-vercel-app.vercel.app
+**Frontend:** https://lab-pilot-capbl.vercel.app
 
-**Backend API:** https://your-backend.up.railway.app/docs
+**Backend API:** https://labpilot-production.up.railway.app/docs
 
 ---
 
