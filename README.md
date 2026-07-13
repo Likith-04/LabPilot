@@ -1,334 +1,432 @@
-# LabPilot - AI Lab Manual Assistant
+# 🚀 LabPilot - AI-Powered PDF Chat using RAG & Multi-Agent Pipeline
 
-LabPilot is a full-stack AI-powered laboratory manual assistant that enables students to upload lab manuals and interact with them through an intelligent chat interface. The application uses Retrieval-Augmented Generation (RAG) to provide accurate, context-aware answers grounded in the uploaded documents.
+LabPilot is a full-stack AI-powered Retrieval-Augmented Generation (RAG) application that enables users to upload PDF documents and interact with them through natural language conversations.
 
-The application features a NotebookLM-inspired workspace where each uploaded lab manual becomes an interactive AI knowledge base.
+The application extracts document content, creates semantic vector embeddings using FAISS, retrieves the most relevant context, and generates accurate, grounded responses using a multi-agent AI pipeline powered by modern Large Language Models.
 
----
-
-## Features
-
-- Secure authentication using Supabase Auth
-- Create multiple workspaces
-- Upload PDF lab manuals
-- Automatic PDF parsing and text extraction
-- Intelligent document chunking using LangChain
-- Semantic search using Hugging Face embeddings
-- Supabase pgvector vector database
-- AI-powered answers using Groq LLM
-- Chat history stored in Supabase
-- NotebookLM-inspired workspace interface
-- Fast document retrieval with similarity search
-- Modern responsive UI built with Next.js
+LabPilot is built with a scalable architecture consisting of a React + TypeScript frontend and a FastAPI backend, supporting multiple AI providers including Groq, OpenRouter, Google Gemini, Hugging Face, and OpenAI.
 
 ---
 
-# Tech Stack
+# ✨ Features
+
+- 📄 Upload and chat with PDF documents
+- 🤖 Multi-Agent Retrieval-Augmented Generation (RAG) pipeline
+- 🔍 Semantic document search using FAISS Vector Database
+- ⚡ Streaming AI responses using Server-Sent Events (SSE)
+- 🧠 Automatic document chunking and embedding generation
+- 📚 Source-aware AI responses with document citations
+- 🔄 Multiple AI provider support (Groq, OpenRouter, Gemini, Hugging Face & OpenAI)
+- 💾 Session-based document isolation using UUIDs
+- 🚀 Local sentence-transformers embedding fallback
+- 🛡️ Built-in upload and chat rate limiting
+- 📜 Browser-based chat history persistence
+- 🐳 Docker-ready backend deployment
+- ☁️ Railway backend deployment
+- ▲ Vercel frontend deployment
+- 📱 Responsive modern UI
+
+---
+
+# 🛠 Tech Stack
 
 ## Frontend
 
-- Next.js 15 (App Router)
-- React 19
-- JavaScript
+- React 18
+- TypeScript
+- Vite
 - Tailwind CSS
-- shadcn/ui
+- React Router
+- Framer Motion
+- Radix UI
+- React Markdown
 - Lucide React
+- Sentry (Optional)
 
 ## Backend
 
-- Next.js Route Handlers
-- LangChain JS
-- Hugging Face Inference API
-- Groq API
+- FastAPI
+- Python
+- Uvicorn
+- LangChain
+- FAISS
+- sentence-transformers
+- PyPDF
+- Pydantic
+- HTTPX
+- AIOHTTP
+- Docker
 
-## Database & Storage
+## AI & Machine Learning
 
-- Supabase PostgreSQL
-- Supabase Auth
-- Supabase Storage
-- Supabase pgvector
+- Retrieval-Augmented Generation (RAG)
+- FAISS Vector Search
+- Sentence Transformers
+- Groq
+- OpenRouter
+- Google Gemini
+- Hugging Face
+- OpenAI
 
 ---
 
-# Project Structure
+# 📁 Project Structure
 
 ```text
 .
-├── app/
-│   ├── (auth)/
-│   │   ├── login/
-│   │   └── signup/
-│   ├── dashboard/
-│   ├── chat/
-│   │   └── [workspaceId]/
-│   ├── api/
-│   │   ├── process-pdf/
-│   │   ├── chat/
-│   │   └── workspaces/
-│   ├── page.js
-│   └── layout.js
-│
-├── components/
-│   ├── Navbar.jsx
-│   ├── WorkspaceCard.jsx
-│   ├── CreateWorkspaceDialog.jsx
-│   ├── ChatInput.jsx
-│   ├── MessageBubble.jsx
-│   ├── PDFUpload.jsx
-│   ├── LoadingSpinner.jsx
-│   └── Logo.jsx
-│
-├── lib/
-│   ├── supabase/
-│   ├── pdf.js
-│   ├── splitter.js
-│   ├── embeddings.js
-│   ├── rag.js
-│   └── groq.js
-│
-├── public/
-├── middleware.js
+├── README.md
 ├── package.json
-└── README.md
+├── labpilot.code-workspace
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── vercel.json
+│   └── src/
+│       ├── components/
+│       ├── hooks/
+│       ├── lib/
+│       ├── pages/
+│       └── types/
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── pyproject.toml
+│   ├── app/
+│   │   ├── agents/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── config.py
+│   │   └── main.py
+│   └── tests/
+└── docs/
 ```
 
 ---
 
-# Architecture
+# 🏗 Architecture
 
 ```text
-                    User Uploads PDF
-                           │
-                           ▼
-                Supabase Storage
-                           │
-                           ▼
-                 Create Workspace
-                           │
-                           ▼
-               Extract PDF Content
-                           │
-                           ▼
-             LangChain Text Splitter
-                           │
-                           ▼
-         Hugging Face Embeddings API
-                           │
-                           ▼
-          Supabase pgvector Database
-───────────────────────────────────────────────────────
-                     User Question
-                           │
-                           ▼
-         Generate Question Embedding
-                           │
-                           ▼
-      Similarity Search (Top Matching Chunks)
-                           │
-                           ▼
-             Retrieved Document Context
-                           │
-                           ▼
-                 Groq Large Language Model
-                           │
-                           ▼
-                   Context-Aware Answer
-                           │
-                           ▼
-          Store Chat History in Supabase
+                +-----------------------+
+                |   React Frontend      |
+                |  (Vite + TypeScript)  |
+                +-----------+-----------+
+                            |
+                            |
+                            ▼
+              Upload PDF / Ask Question
+                            |
+                            ▼
+                 FastAPI Backend API
+                            |
+         +------------------+------------------+
+         |                                     |
+         ▼                                     ▼
+ PDF Processing                     Multi-Agent Pipeline
+         |                                     |
+         ▼                                     ▼
+ Text Chunking                     Query Understanding
+         |                                     |
+         ▼                                     ▼
+ Embedding Generation               Context Retrieval
+         |                                     |
+         +------------+-------------------------+
+                      |
+                      ▼
+              FAISS Vector Store
+                      |
+                      ▼
+          Relevant Context Retrieved
+                      |
+                      ▼
+             Large Language Model
+   (Groq / OpenRouter / Gemini / OpenAI)
+                      |
+                      ▼
+          Context-Aware AI Response
+                      |
+                      ▼
+             React Chat Interface
 ```
 
 ---
 
-# Workflow
+# 🔌 API Endpoints
 
-```text
-User Login
-      │
-      ▼
-Create Workspace
-      │
-      ▼
-Upload Lab Manual
-      │
-      ▼
-PDF Processing
-      │
-      ▼
-Chunk Document
-      │
-      ▼
-Generate Embeddings
-      │
-      ▼
-Store in Vector Database
-      │
-      ▼
-Chat with Lab Manual
-      │
-      ▼
-Retrieve Relevant Chunks
-      │
-      ▼
-Generate AI Response
+Most document and chat endpoints require the `X-Chat-Session-Id` header containing a UUID v4.
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/` | Backend Status |
+| GET | `/health` | Health Check |
+| GET | `/models` | Available Models |
+| GET | `/pipeline-info` | Pipeline Information |
+| GET | `/runtime-summary` | Runtime Summary |
+| GET | `/status` | Session Status |
+| POST | `/upload` | Upload & Index PDF |
+| POST | `/ask` | Chat with PDF |
+| POST | `/ask/stream` | Streaming Chat |
+| POST | `/api/oversight` | Optional Sentry Tunnel |
+
+Example:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/ask" \
+-H "Content-Type: application/json" \
+-H "X-Chat-Session-Id: 11111111-2222-4333-8444-555555555555" \
+-d '{"question":"Summarize this PDF","include_sources":true}'
 ```
 
 ---
 
-# Database Schema
+# ⚙️ Environment Variables
 
-## workspaces
+## Backend
 
-| Column | Type |
-|----------|------|
-| id | UUID |
-| user_id | UUID |
-| title | TEXT |
-| pdf_url | TEXT |
-| file_name | TEXT |
-| status | TEXT |
-| created_at | TIMESTAMP |
-
----
-
-## document_chunks
-
-| Column | Type |
-|----------|------|
-| id | UUID |
-| workspace_id | UUID |
-| page | INTEGER |
-| chunk_index | INTEGER |
-| content | TEXT |
-| embedding | VECTOR(384) |
-
----
-
-## chats
-
-| Column | Type |
-|----------|------|
-| id | UUID |
-| workspace_id | UUID |
-| user_id | UUID |
-| created_at | TIMESTAMP |
-
----
-
-## messages
-
-| Column | Type |
-|----------|------|
-| id | UUID |
-| chat_id | UUID |
-| role | TEXT |
-| content | TEXT |
-| created_at | TIMESTAMP |
-
----
-
-# Environment Variables
-
-Create a `.env.local` file.
+Create `backend/.env`
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=
+PORT=8000
 
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 
-SUPABASE_SERVICE_ROLE_KEY=
+DEFAULT_PROVIDER=groq
+DEFAULT_MODEL=llama-3.3-70b-versatile
 
 GROQ_API_KEY=
+OPENROUTER_API_KEY=
+OPENROUTER_API_BASE=https://openrouter.ai/api/v1
+GOOGLE_API_KEY=
+HF_API_KEY=
+OPENAI_DIRECT_API_KEY=
 
-HUGGINGFACE_API_KEY=
+FAISS_PERSIST_DIR=faiss_index
+MAX_VECTOR_SESSIONS=64
+FAISS_SESSION_MAX_AGE_DAYS=3
+
+RATE_LIMIT_UPLOAD_PER_MINUTE=8
+RATE_LIMIT_ASK_PER_MINUTE=90
+
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=local
+```
+
+## Frontend
+
+Create `frontend/.env`
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
+VITE_DEV_PROXY_TARGET=http://127.0.0.1:8000
+VITE_APP_ENV=local
+VITE_SENTRY_DSN=
+VITE_SENTRY_TRACES_RATE=0
+```
+
+Production
+
+```env
+VITE_API_BASE_URL=https://your-backend-domain.com
 ```
 
 ---
 
-# Local Development
+# 💻 Local Development
 
-## Clone Repository
+## 1. Clone Repository
 
 ```bash
-git clone <repository-url>
-cd labpilot
+git clone https://github.com/YOUR_USERNAME/LabPilot.git
+
+cd LabPilot
 ```
 
-## Install Dependencies
+---
+
+## 2. Install Frontend
 
 ```bash
+cd frontend
+
 npm install
-```
 
-## Run Development Server
-
-```bash
 npm run dev
 ```
 
-Application runs on:
+Frontend runs on
 
-```text
-http://localhost:3000
+```
+http://localhost:5173
 ```
 
 ---
 
-# RAG Pipeline
+## 3. Start Backend
 
-The retrieval pipeline follows these steps:
+```bash
+cd backend
 
-1. Upload PDF to Supabase Storage
-2. Extract text from PDF
-3. Split text into semantic chunks
-4. Generate embeddings using Hugging Face
-5. Store vectors in Supabase pgvector
-6. Convert user question into an embedding
-7. Perform similarity search
-8. Retrieve the most relevant chunks
-9. Send retrieved context to Groq
-10. Generate a grounded response
-11. Store conversation history
+python -m venv .venv
+
+source .venv/bin/activate
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Backend
+
+```
+http://127.0.0.1:8000
+```
+
+Swagger
+
+```
+http://127.0.0.1:8000/docs
+```
 
 ---
 
-# Deployment
+# ✅ Quality Checks
 
-## Frontend & Backend
+## Frontend
 
-Deploy directly on **Vercel**.
+```bash
+cd frontend
 
-Required environment variables:
+npm run typecheck
+
+npm run lint
+
+npm run build
+```
+
+## Backend
+
+```bash
+cd backend
+
+pip install -r requirements.txt -r requirements-dev.txt
+
+ruff check app
+
+mypy app
+
+python -m unittest discover -s tests -p "test_*.py"
+```
+
+---
+
+# 🚀 Deployment
+
+## Backend (Railway)
+
+- Root Directory: `backend`
+- Dockerfile: `Dockerfile`
+- Container Port: `3000`
+- Health Check: `/health`
+
+Environment Variables
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=
+PORT=3000
 
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
-SUPABASE_SERVICE_ROLE_KEY=
+DEFAULT_PROVIDER=groq
+DEFAULT_MODEL=llama-3.3-70b-versatile
 
 GROQ_API_KEY=
+OPENROUTER_API_KEY=
+OPENROUTER_API_BASE=https://openrouter.ai/api/v1
 
-HUGGINGFACE_API_KEY=
+FAISS_PERSIST_DIR=faiss_index
+
+MAX_VECTOR_SESSIONS=64
+
+FAISS_SESSION_MAX_AGE_DAYS=3
+
+RATE_LIMIT_UPLOAD_PER_MINUTE=8
+
+RATE_LIMIT_ASK_PER_MINUTE=90
+
+CORS_ORIGINS=https://your-frontend-domain.vercel.app
+```
+
+Optional persistent storage mount
+
+```
+/app/faiss_index
 ```
 
 ---
 
-# Future Improvements
+## Frontend (Vercel)
 
-- Streaming AI responses
-- Multi-PDF workspaces
-- Source citations
-- Notebook-style notes
-- Voice interaction
-- Workspace sharing
-- AI-generated experiment summaries
-- Viva preparation mode
-- Dark/Light theme
-- Export conversations
+Settings
+
+```
+Framework Preset : Vite
+
+Root Directory : frontend
+
+Install Command : npm install
+
+Build Command : npm run build
+
+Output Directory : dist
+```
+
+Environment Variable
+
+```env
+VITE_API_BASE_URL=https://your-backend-domain.up.railway.app
+```
 
 ---
 
-# Acknowledgements
+# 🛠 Troubleshooting
 
-LabPilot is inspired by modern Retrieval-Augmented Generation (RAG) systems and document-centric AI assistants such as NotebookLM, while being specifically designed for laboratory manuals and engineering education.
+- Add your deployed frontend URL to `CORS_ORIGINS`.
+- Ensure `VITE_API_BASE_URL` points to your deployed backend.
+- Use the same `X-Chat-Session-Id` for upload and chat requests.
+- Verify provider API keys if AI responses fail.
+- Mount `/app/faiss_index` if you need persistent vector storage.
+- Redeploy after changing environment variables.
+
+---
+
+# 🔮 Future Improvements
+
+- Multi-PDF support
+- Hybrid Search (Keyword + Semantic Search)
+- OCR support for scanned PDFs
+- Authentication & User Accounts
+- Conversation Memory
+- Cloud Object Storage
+- Admin Dashboard
+- Analytics & Usage Monitoring
+- PDF Annotation Support
+
+---
+
+# 🌐 Live Demo
+
+**Frontend:** https://your-vercel-app.vercel.app
+
+**Backend API:** https://your-backend.up.railway.app/docs
+
+---
+
+# 📸 Screenshots
+
+- Home Page
+- PDF Upload
+- Chat Interface
+- Source Citations
+- Streaming Responses
+- Mobile Responsive View
+
+---
+
+## ⭐ If you found this project useful, consider giving it a star on GitHub!
