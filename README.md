@@ -1,4 +1,4 @@
-# 🚀 LabPilot - AI-Powered PDF Chat using RAG & Multi-Agent Pipeline
+# LabPilot - AI-Powered PDF Chat using RAG & Multi-Agent Pipeline
 
 LabPilot is a full-stack AI-powered Retrieval-Augmented Generation (RAG) application that enables users to upload PDF documents and interact with them through natural language conversations.
 
