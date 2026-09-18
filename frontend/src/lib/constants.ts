@@ -35,7 +35,7 @@ export const APP_CONFIG = {
     "An AI-powered laboratory manual assistant for engineering students",
   author: "Arnob Mahmud",
   version: "1.0.0",
-  github: "https://github.com/Likith-04/LabPilot.git/",
+  github: "https://github.com/Likith-04/LabPilot.git",
 } as const;
 
 /**
@@ -96,8 +96,7 @@ export const NAV_LINKS = [
  */
 export const SOCIAL_LINKS = {
   github: "https://github.com/Likith-04/LabPilot.git",
-  repository:
-    "https://github.com/Likith-04/LabPilot.git/",
+  repository: "https://github.com/Likith-04/LabPilot.git",
   linkedin: "",
   twitter: "",
 } as const;
