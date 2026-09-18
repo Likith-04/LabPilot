@@ -27,7 +27,7 @@ export function useHealth(): UseHealthReturn {
     const check = async () => {
       try {
         const res = await fetch(joinApiUrl("/health"), {
-          signal: AbortSignal.timeout(5000),
+          signal: AbortSignal.timeout(15000),
         });
         if (!cancelled) setStatus(res.ok ? "connected" : "disconnected");
       } catch {
