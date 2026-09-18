@@ -118,25 +118,37 @@ Add a volume mounted at:
 
 ## Render
 
-Use a Web Service with Docker.
+Deploy as a **Web Service** using Docker (works on Free or Paid plans).
 
-Recommended settings:
-
+### Render Web Service Settings:
 ```text
-Root directory: backend
-Dockerfile path: Dockerfile
-Health check path: /health
+Type: Web Service
+Environment: Docker
+Root Directory: (leave blank for root, or set to 'backend')
+Dockerfile Path: Dockerfile (or backend/Dockerfile if root dir is 'backend')
+Health Check Path: /health
+Auto-Deploy: Yes
 ```
 
-Set environment variables from `.env.example`.
+### Essential Environment Variables in Render:
+Set these under **Environment** in your Render service dashboard:
 
-Use a paid instance with a persistent disk mounted at:
+| Variable | Example Value | Description |
+|---|---|---|
+| `PORT` | `10000` | (Render provides this automatically) |
+| `CORS_ORIGINS` | `https://your-frontend.vercel.app` | Your Vercel frontend URL (comma-separated if multiple) |
+| `DEFAULT_PROVIDER` | `groq` | Primary LLM provider (`groq`, `gemini`, or `openrouter`) |
+| `DEFAULT_MODEL` | `llama-3.3-70b-versatile` | Primary chat model (e.g. `llama-3.3-70b-versatile` or `gemini-2.5-flash`) |
+| `GROQ_API_KEY` | `gsk_...` | Groq API Key (for fast LLM responses) |
+| `GOOGLE_API_KEY` | `AIzaSy...` | Google AI Studio Key (**Recommended** for free fast PDF embeddings & Gemini models) |
+| `OPENROUTER_API_KEY`| `sk-or-...` | OpenRouter API Key (optional) |
 
-```text
-/app/faiss_index
-```
+> [!TIP]
+> **Free PDF Embedding Provider**:
+> Groq is specialized for fast LLM inference but does not host embeddings. Pairing `GROQ_API_KEY` for chat with a free `GOOGLE_API_KEY` from [Google AI Studio](https://aistudio.google.com/) provides lightning-fast PDF embeddings (`gemini-embedding-001`) with zero RAM overhead (~45 MB total memory usage), running flawlessly on Render's 512 MB Free Tier.
 
-Do not rely on the free web service for production-like testing of PDF uploads, because filesystem changes are ephemeral.
+### Persistent Storage (Optional for Paid Plans):
+If you upgrade to a paid Render plan, mount a disk at `/app/faiss_index` so vector indices survive redeploys. On the Free tier, indices are kept in memory and ephemeral disk for the active session.
 
 ## Backend Smoke Test
 

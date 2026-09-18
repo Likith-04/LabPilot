@@ -1,7 +1,6 @@
-# Railway backend image for the monorepo root.
+# Docker backend image for the monorepo root (Render / Production).
 #
-# Railway auto-detects a Dockerfile only at the service source root. This file
-# builds the FastAPI backend from ./backend while leaving frontend deployment to
+# Builds the FastAPI backend from ./backend while leaving frontend deployment to
 # Vercel.
 
 FROM python:3.12-slim

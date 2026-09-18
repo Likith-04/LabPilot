@@ -9,7 +9,6 @@ import logging
 import os
 from typing import Any, cast
 
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
@@ -81,17 +80,32 @@ class VectorStoreService:
         return provider.api_key
 
     def _make_local_cpu_embeddings(self, model: str) -> Embeddings:
-        """Runs MiniLM (etc.) on CPU via sentence-transformers — no cloud API."""
-        mk: dict[str, Any] = {"device": "cpu"}
-        return HuggingFaceEmbeddings(model_name=model, model_kwargs=mk)
+        """Runs MiniLM (etc.) on CPU via sentence-transformers (lazy loaded)."""
+        try:
+            from langchain_community.embeddings import HuggingFaceEmbeddings
+            mk: dict[str, Any] = {"device": "cpu"}
+            return HuggingFaceEmbeddings(model_name=model, model_kwargs=mk)
+        except ImportError as exc:
+            raise RuntimeError(
+                "sentence-transformers is not installed. To use local CPU embeddings, "
+                "install sentence-transformers or configure a cloud embedding key "
+                "(GOOGLE_API_KEY for free Gemini embeddings, OPENROUTER_API_KEY, or OPENAI_DIRECT_API_KEY)."
+            ) from exc
 
     def _make_embeddings(self, provider: AIProvider, model: str) -> Embeddings:
         if provider.name == "huggingface":
             key = self._resolve_api_key(provider)
-            mk: dict[str, Any] = {"device": "cpu"}
-            if key:
-                mk["token"] = key
-            return HuggingFaceEmbeddings(model_name=model, model_kwargs=mk)
+            try:
+                from langchain_community.embeddings import HuggingFaceEmbeddings
+                mk: dict[str, Any] = {"device": "cpu"}
+                if key:
+                    mk["token"] = key
+                return HuggingFaceEmbeddings(model_name=model, model_kwargs=mk)
+            except ImportError as exc:
+                raise RuntimeError(
+                    "sentence-transformers is not installed for Hugging Face embeddings. "
+                    "Configure GOOGLE_API_KEY or OPENROUTER_API_KEY, or install sentence-transformers."
+                ) from exc
         if provider.name == "groq":
             key = self._resolve_api_key(provider)
             if not key:
